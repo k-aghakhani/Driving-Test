@@ -11,6 +11,7 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!-- TextView for displaying the question -->
     <TextView
         android:id="@+id/questionText"
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
         android:layout_marginBottom="16dp"
         android:text="Question will appear here" />
 
+    <!-- RadioGroup containing answer options -->
     <RadioGroup
         android:id="@+id/optionsGroup"
         android:layout_width="match_parent"
@@ -74,6 +76,7 @@
             android:fontFamily="@font/roboto" />
     </RadioGroup>
 
+    <!-- Button to navigate to the next question -->
     <Button
         android:id="@+id/nextButton"
         android:layout_width="match_parent"
