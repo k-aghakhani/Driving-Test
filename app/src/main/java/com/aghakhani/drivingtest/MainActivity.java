@@ -1,7 +1,11 @@
 package com.aghakhani.drivingtest;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -86,23 +90,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void showResultDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Quiz Result");
-        builder.setMessage("You scored " + score + " out of " + questions.length + "\nDo you want to retry?");
-        builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resetQuiz();
-            }
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_result, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        TextView title = dialogView.findViewById(R.id.dialogTitle);
+        TextView message = dialogView.findViewById(R.id.dialogMessage);
+        Button retryButton = dialogView.findViewById(R.id.retryButton);
+        Button exitButton = dialogView.findViewById(R.id.exitButton);
+
+        title.setText("Quiz Result");
+        // تنظیم متن با رنگ سبز برای امتیاز
+        String text = "You scored " + score + " out of " + questions.length + ".";
+        SpannableString spannableString = new SpannableString(text);
+
+        // تغییر رنگ بخشی از متن به سبز
+        int start = text.indexOf(String.valueOf(score)); // موقعیت عدد امتیاز
+        int end = start + String.valueOf(score).length();
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.result_color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        message.setText(spannableString);
+        retryButton.setOnClickListener(v -> {
+            resetQuiz();
+            dialog.dismiss();
         });
-        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
+        exitButton.setOnClickListener(v -> finish());
+
+        dialog.setCancelable(false);
+        dialog.show();
     }
+
+
 
     private void resetQuiz() {
         currentQuestionIndex = 0;
