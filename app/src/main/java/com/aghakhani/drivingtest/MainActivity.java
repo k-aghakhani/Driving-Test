@@ -1,5 +1,6 @@
 package com.aghakhani.drivingtest;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 if (currentQuestionIndex < questions.length) {
                     loadQuestion();
                 } else {
-                    showResult();
+                    showResultDialog();
                 }
             }
         });
@@ -104,9 +106,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Show the final result
-    private void showResult() {
-        String resultMessage = "You scored " + score + " out of " + questions.length;
-        Toast.makeText(this, resultMessage, Toast.LENGTH_LONG).show();
-        // finish();
+    private void showResultDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Quiz Result");
+        builder.setMessage("You scored " + score + " out of " + questions.length + "\nDo you want to retry?");
+        builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetQuiz();
+            }
+        });
+        builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void resetQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        loadQuestion();
+    }
+
+    private void showAlert(String message, boolean finishOnDismiss) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (finishOnDismiss) finish();
+            }
+        });
+        builder.show();
     }
 }
