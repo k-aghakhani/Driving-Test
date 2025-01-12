@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -70,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 // Check if an option was selected
                 if (selectedId == -1) {
                     // Show a message if no answer is selected
-                    Toast.makeText(MainActivity.this, "Please select an answer", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(MainActivity.this, "Please select an answer", Toast.LENGTH_SHORT).show();
+                    custom_toast( "Please select an answer");
                     return;
                 }
 
@@ -155,4 +157,18 @@ public class MainActivity extends AppCompatActivity {
         score = 0; // Reset the score
         loadQuestion(); // Load the first question
     }
+
+    private void custom_toast(String s) {
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastLayout = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastLayout.findViewById(R.id.toast_message);
+        toastMessage.setText(s);
+        Toast customToast = new Toast(getApplicationContext());
+        customToast.setDuration(Toast.LENGTH_LONG);
+        customToast.setView(customToastLayout);
+        customToast.show();
+
+    }
+
+
 }
